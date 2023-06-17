@@ -1,22 +1,41 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
-import Todolist from "./Todolist";
+import Todolist, {TasksType} from "./Todolist";
+
+export type FilterValuesType = 'all' | 'active' | 'complete';
 
 function App() {
-    const tasks1 = [
+
+    let [tasks, setTasks] = useState<TasksType[]>([
         {id: 1, title: "HTML&CSS", isDone: true},
         {id: 2, title: "JS", isDone: true},
         {id: 3, title: "ReactJS", isDone: false}
-    ]
-    const tasks2 = [
-        {id: 1, title: "I am sad", isDone: true},
-        {id: 2, title: "I am Happy", isDone: false},
-        {id: 3, title: "I have been better", isDone: false}
-    ]
+    ])
+    let [filter, setFilter] = useState<FilterValuesType>('all')
+    const deleteTask = (taskId: number) => {
+        const findTask = tasks.filter((task) => task.id !== taskId)
+        setTasks(findTask)
+    }
+    const changeFilter = (value: FilterValuesType) => {
+        setFilter(value)
+    }
+    let tasksForTodolist = tasks//here are store filtered shuffles
+
+    if (filter === 'active') {
+        tasksForTodolist = tasks.filter(t => t.isDone === false)
+    }
+    if (filter === 'complete') {
+        tasksForTodolist = tasks.filter(t => t.isDone === true)
+    }
+
+
     return (
         <div className='App'>
-            <Todolist title={'What to learn?'} tasks={tasks1}/>
-            <Todolist title={'Choose your mood'} tasks={tasks1}/>
+            <Todolist title={'What to learn?'}
+                      tasks={tasksForTodolist}
+                      deleteTask={deleteTask}
+                      changeFilter={changeFilter}
+            />
         </div>
     )
 }
