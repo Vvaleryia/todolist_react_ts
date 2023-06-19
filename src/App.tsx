@@ -29,10 +29,11 @@ function App() {
         const findTask = tasks.find(task => task.id === taskId)
         if (findTask) {
             findTask.isDone = isDone
+            setTasks([...tasks])
         }
     }
 
-    let tasksForTodolist = tasks//here are store filtered shuffles
+    let tasksForTodolist = tasks//here are store filtered tasks
     if (filter === 'active') {
         tasksForTodolist = tasks.filter(t => t.isDone === false)
     }
@@ -49,6 +50,7 @@ function App() {
                       changeFilter={changeFilter}
                       addTask={addTask}
                       changeTaskStatus={changeTaskStatus}
+                      filter = {filter}
             />
         </div>
     )
