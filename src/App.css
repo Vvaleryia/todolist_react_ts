@@ -1,5 +1,11 @@
+
 .App {
-    margin: 0 30px auto;
+    padding: 30px;
+    display: flex;
+}
+
+.App > div {
+    margin-right: 50px;
 }
 
 .error {
@@ -9,6 +15,12 @@
 .error-message {
     color: red;
 }
+
 .active-filter {
     background-color: aquamarine;
 }
+
+.is-done {
+    opacity: 0.5;
+}
+
