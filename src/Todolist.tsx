@@ -2,6 +2,8 @@ import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {FilterValuesType} from "./App";
 import AddItemForm from "./universal components/AddItemForm";
 import EditableSpan from "./universal components/EditableSpan";
+import {Button, Checkbox, IconButton} from "@mui/material";
+import {Delete} from "@mui/icons-material";
 
 export type TasksType = {
     id: string
@@ -39,16 +41,18 @@ const Todolist = (props: TodolistPropsType) => {
         props.addTask(props.todolistId, newTitle)
     }
     const onChangeTitleTodolist = (newTitle: string) => {
-        props.changeTitleTodolist(props.todolistId,newTitle)
+        props.changeTitleTodolist(props.todolistId, newTitle)
     }
     return (
         <div>
             <div>
-                <h3> <EditableSpan value={props.title} onChangeTitle={onChangeTitleTodolist}/>
-                    <button onClick={onClickHandlerDeleteTodolist}>x</button>
+                <h3><EditableSpan value={props.title} onChangeTitle={onChangeTitleTodolist}/>
+                    <IconButton onClick={onClickHandlerDeleteTodolist}>
+                        <Delete/>
+                    </IconButton>
                 </h3>
                 <AddItemForm addItem={addItem}/>
-                <ul>
+                <div>
                     {props.tasks.map((task) => {
                         const onClickHandlerDeleteTask = () => {
                             props.deleteTask(props.todolistId, task.id)
@@ -61,26 +65,29 @@ const Todolist = (props: TodolistPropsType) => {
                             props.changeTitleTask(props.todolistId, task.id, newTitle)
                         }
                         return (
-                            <li key={task.id}>
-                                <input type='checkbox'
-                                       checked={task.isDone}
+                            <div key={task.id}>
+                                <Checkbox checked={task.isDone}
                                        onChange={onChangeHandlerIsDoneTask}/>
                                 <EditableSpan value={task.title} onChangeTitle={onChangeTitleTask}/>
-                                <button onClick={onClickHandlerDeleteTask}>x
-                                </button>
-                            </li>
+                                <IconButton onClick={onClickHandlerDeleteTask}>
+                                    <Delete/>
+                                </IconButton>
+                            </div>
                         )
                     })}
-                </ul>
+                </div>
                 <div>
-                    <button className={props.filter === 'all' ? 'active-filter' : ''} onClick={onClickHandlerAll}>All
-                    </button>
-                    <button className={props.filter === 'active' ? 'active-filter' : ''}
-                            onClick={onClickHandlerActive}>Active
-                    </button>
-                    <button className={props.filter === 'complete' ? 'active-filter' : ''}
-                            onClick={onClickHandlerComplete}>Completed
-                    </button>
+                    <Button variant={props.filter === 'all' ? 'outlined' : 'text'}
+                            onClick={onClickHandlerAll}>All
+                    </Button>
+                    <Button variant={props.filter === 'active' ? 'outlined' : 'text'}
+                            onClick={onClickHandlerActive}
+                            color={'primary'}>Active
+                    </Button>
+                    <Button variant={props.filter === 'complete' ? 'outlined' : 'text'}
+                            onClick={onClickHandlerComplete}
+                            color={'secondary'}>Completed
+                    </Button>
                 </div>
             </div>
         </div>
