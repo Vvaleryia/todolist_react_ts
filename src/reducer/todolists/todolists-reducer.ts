@@ -8,25 +8,22 @@ export const todolistsReducer = (state: Array<TodolistsType>, action: ActionsTyp
             return state.filter(todo => todo.id !== action.todolistId)
         }
         case 'ADD-TODOLIST'  : {
-            const copyState = state
-            const newTodolist = {id: v1(), title: action.newTitle, filter: 'all'}
-            return [newTodolist, ...copyState]
+            const newTodolist = {id: action.todolistId, title: action.newTitle, filter: 'all'}
+            return [newTodolist, ...state]
         }
         case 'CHANGE-TITLE-TODOLIST' : {
-            const copyState = state
-            const findTodolist = copyState.find(todo => todo.id === action.todolistId)
+            const findTodolist = state.find(todo => todo.id === action.todolistId)
             if (findTodolist) {
                 findTodolist.title = action.newTitle
             }
-            return copyState
+            return [...state]
         }
         case 'CHANGE-FILTER-TODOLIST' : {
-            const copyState = state
-            const findTodolist = copyState.find(todo => todo.id === action.todolistId)
+            const findTodolist = state.find(todo => todo.id === action.todolistId)
             if (findTodolist) {
                 findTodolist.filter = action.newFilter
             }
-            return copyState
+            return [...state]
         }
         default:
             return state
@@ -47,12 +44,14 @@ export const deleteTodolistAC = (todolistId: string): deleteTodolistAT => {
 export type addTodolistAT = {
     type: 'ADD-TODOLIST',
     newTitle: string
+    todolistId: string
 }
 
 export const addTodolistAC = (newTitle: string): addTodolistAT => {
     return ({
         type: 'ADD-TODOLIST' as const,
-        newTitle
+        newTitle,
+        todolistId: v1()
     })
 }
 
