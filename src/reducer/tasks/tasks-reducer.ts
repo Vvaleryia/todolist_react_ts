@@ -2,9 +2,16 @@ import {TasksStateType} from "../../App";
 import {v1} from "uuid";
 import {addTodolistAT, deleteTodolistAT} from "../todolists/todolists-reducer";
 
-type ActionsType = removeTaskAT | addTaskAT | changeTaskStatusAT | changeTaskTitleAT | deleteTodolistAT | addTodolistAT;
-export const tasksReducer = (state: TasksStateType, action: ActionsType) => {
-    switch(action.type) {
+type ActionsType = removeTaskAT |
+    addTaskAT |
+    changeTaskStatusAT |
+    changeTaskTitleAT |
+    deleteTodolistAT |
+    addTodolistAT;
+
+const initialState: TasksStateType = {}
+export const tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
+    switch (action.type) {
         case 'REMOVE-TASK' : {
             const stateCopy = {...state};
             const tasks = state[action.todolistId];
@@ -24,7 +31,7 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType) => {
             const stateCopy = {...state};
             const tasks = stateCopy[action.todolistId];
             const findTask = tasks.find(task => task.id === action.taskId)
-            if(findTask) {
+            if (findTask) {
                 findTask.isDone = action.newFilter
             }
             return stateCopy
@@ -33,7 +40,7 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType) => {
             const stateCopy = {...state};
             const tasks = stateCopy[action.todolistId];
             const findTask = tasks.find(task => task.id === action.taskId)
-            if(findTask) {
+            if (findTask) {
                 findTask.title = action.newTitle
             }
             return stateCopy
@@ -50,28 +57,29 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType) => {
             delete stateCopy[action.todolistId]
             return stateCopy;
         }
-        default: return state
+        default:
+            return state
     }
 }
 type removeTaskAT = {
-    type : 'REMOVE-TASK'
+    type: 'REMOVE-TASK'
     todolistId: string
     taskId: string
 }
-export const removeTaskAC = (todolistId: string,taskId: string):removeTaskAT => {
+export const removeTaskAC = (todolistId: string, taskId: string): removeTaskAT => {
     return ({
-        type:'REMOVE-TASK' as const,
+        type: 'REMOVE-TASK' as const,
         todolistId,
         taskId
     })
 }
 type addTaskAT = {
-    type : 'ADD-TASK'
+    type: 'ADD-TASK'
     todolistId: string
     newTitle: string
 }
-export const addTaskAC = (todolistId: string, newTitle: string):addTaskAT => {
-    return { type: 'ADD-TASK', todolistId,newTitle}
+export const addTaskAC = (todolistId: string, newTitle: string): addTaskAT => {
+    return {type: 'ADD-TASK', todolistId, newTitle}
 }
 
 type changeTaskStatusAT = {
@@ -80,8 +88,8 @@ type changeTaskStatusAT = {
     taskId: string
     newFilter: boolean
 }
-export const changeTaskStatusAC = (todolistId: string, taskId:string, newFilter: boolean):changeTaskStatusAT => {
-    return {type: 'CHANGE-TASK-STATUS',todolistId, taskId, newFilter}
+export const changeTaskStatusAC = (todolistId: string, taskId: string, newFilter: boolean): changeTaskStatusAT => {
+    return {type: 'CHANGE-TASK-STATUS', todolistId, taskId, newFilter}
 }
 
 type changeTaskTitleAT = {
@@ -90,6 +98,6 @@ type changeTaskTitleAT = {
     taskId: string
     newTitle: string
 }
-export const changeTaskTitleAC = (todolistId: string, taskId:string, newTitle: string):changeTaskTitleAT => {
-    return {type: 'CHANGE-TASK-TITLE',todolistId, taskId, newTitle}
+export const changeTaskTitleAC = (todolistId: string, taskId: string, newTitle: string): changeTaskTitleAT => {
+    return {type: 'CHANGE-TASK-TITLE', todolistId, taskId, newTitle}
 }
