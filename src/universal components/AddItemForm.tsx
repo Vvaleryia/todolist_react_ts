@@ -1,47 +1,49 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {Button, IconButton, TextField} from "@mui/material";
-import {ControlPoint} from "@mui/icons-material";
+import {IconButton, TextField} from "@mui/material";
+import {AddBox, ControlPoint} from "@mui/icons-material";
 
 type AddItemFormPropsType = {
     addItem: (newTitle: string) => void
 }
-const AddItemForm = (props: AddItemFormPropsType) => {
-    const [error, setError] = useState<string | null>(null)
-    const [title, setTitle] = useState<string>('')
-    const oncChangeHandlerTask = (event: ChangeEvent<HTMLInputElement>) => {
-        setTitle(event.currentTarget.value)
-    }
-    const onKeyDownHandlerTask = (event: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
-        if (event.key === 'Enter') {
-            addTask()
-        }
-    }
-    const addTask = () => {
-        if (title.trim() !== '') {
-            props.addItem(title.trim())
-            setTitle('')
+export const AddItemForm = React.memo( (props: AddItemFormPropsType) => {
+
+    let [title, setTitle] = useState("")
+    let [error, setError] = useState<string | null>(null)
+
+    const addItem = () => {
+        if (title.trim() !== "") {
+            props.addItem(title);
+            setTitle("");
         } else {
-            setError('Title is required')
+            setError("Title is required");
         }
     }
-    return (
-        <div>
+
+    const onChangeHandlerTask = (e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.currentTarget.value)
+    }
+
+    const onKeyDownHandlerTask = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (error !== null) {
+            setError(null);
+        }
+        if (e.key === 'Enter') {
+            addItem();
+        }
+    }
+    return <div>
             <TextField
                 variant={'outlined'}
                 label={'Type value'}
                 value={title}
-                onChange={oncChangeHandlerTask}
+                onChange={onChangeHandlerTask}
                 onKeyDown={onKeyDownHandlerTask}
                 error={!!error}
                 helperText={error}
             />
-            <IconButton style={{maxWidth: '30px', maxHeight: '30px', minWidth: '30px', minHeight: '30px'}}
-                        color='primary' onClick={addTask}>
-                <ControlPoint/>
+            <IconButton color='primary' onClick={addItem}>
+                <AddBox/>
             </IconButton>
         </div>
-    );
-};
 
-export default AddItemForm;
+});
